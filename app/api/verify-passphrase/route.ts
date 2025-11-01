@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Passphrase required' }, { status: 400 });
     }
 
-    const hashedPassword = process.env.PUBLIC_PASSWORD_HASH;
+    const hashedPassword = process.env.PASSWORD_HASH;
     
     if (!hashedPassword) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });

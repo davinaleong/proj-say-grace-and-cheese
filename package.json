@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate-hash": "node scripts/generate-hash.mjs",
+    "hash": "node scripts/hash-generator.cjs"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
