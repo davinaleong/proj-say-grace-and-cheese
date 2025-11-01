@@ -14,7 +14,7 @@ const photographerData: Record<string, { name: string; photos: string[] }> = {
     name: 'Davina',
     photos: ['0001.jpg', '0002.jpg', '0003.jpg', '0004.jpg', '0005.jpg', '0006.jpg', '0007.jpg', '0008.jpg', '0009.jpg', '0010.jpg', '0011.jpg', '0012.jpg', '0013.jpg', '0014.jpg', '0015.jpg', '0016.jpg']
   },
-  'mayhwee': {
+  'may-hwee': {
     name: 'May Hwee',
     photos: ['0001.jpg', '0002.jpg', '0003.jpg', '0004.jpg', '0005.jpg', '0006.jpg', '0007.jpg', '0008.jpg', '0009.jpg', '0010.jpg', '0011.jpg']
   },
@@ -27,7 +27,7 @@ const photographerData: Record<string, { name: string; photos: string[] }> = {
     photos: ['0001.jpg', '0002.jpg', '0003.jpg', '0004.jpg', '0005.jpg', '0006.jpg', '0007.jpg', '0008.jpg']
   },
   'yy': {
-    name: 'yy',
+    name: 'YY',
     photos: ['0001.jpg', '0002.jpg']
   }
 };
