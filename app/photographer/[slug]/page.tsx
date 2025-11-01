@@ -3,6 +3,7 @@ import { mapPhotographerToAsset } from '../../utils/photographer-mapper';
 import Title from '../../components/Title';
 import PhotoGallery from './PhotoGallery';
 import BackLink from './BackLink';
+import ClientWrapper from './ClientWrapper';
 
 // This would typically come from a database or config
 const photographerData: Record<string, { name: string; photos: string[] }> = {
@@ -49,60 +50,62 @@ export default async function PhotographerPage({ params }: PhotographerPageProps
   const assetPath = mapPhotographerToAsset(photographer.name);
 
   return (
-    <div style={{
-      backgroundColor: '#ffdbdc',
-      minHeight: '100vh',
-      padding: '2em',
-      fontFamily: 'Montserrat, sans-serif'
-    }}>
-      {/* Header */}
-      <div style={{ 
-        textAlign: 'center', 
-        marginBottom: '2em' 
+    <ClientWrapper>
+      <div style={{
+        backgroundColor: '#ffdbdc',
+        minHeight: '100vh',
+        padding: '2em',
+        fontFamily: 'Montserrat, sans-serif'
       }}>
-        <Title />
-        <h1 style={{
-          fontSize: '2.5em',
-          color: '#1c1c4a',
-          marginBottom: '0.5em',
-          fontWeight: 'bold'
+        {/* Header */}
+        <div style={{ 
+          textAlign: 'center', 
+          marginBottom: '2em' 
         }}>
-          {photographer.name}&apos;s Gallery
-        </h1>
-        <p style={{
-          fontSize: '1.2em',
-          color: '#666',
-          marginBottom: '1em'
-        }}>
-          {photographer.photos.length} beautiful moments captured
-        </p>
-      </div>
-
-      {/* Gallery Content */}
-      {photographer.photos.length > 0 ? (
-        <PhotoGallery 
-          photos={photographer.photos}
-          assetPath={assetPath}
-        />
-      ) : (
-        <div style={{
-          textAlign: 'center',
-          padding: '4em 2em',
-          color: '#666'
-        }}>
-          <div style={{ fontSize: '4em', marginBottom: '0.5em' }}>📷</div>
-          <h2>No photos available</h2>
-          <p>Check back soon for new photos!</p>
+          <Title />
+          <h1 style={{
+            fontSize: '2.5em',
+            color: '#1c1c4a',
+            marginBottom: '0.5em',
+            fontWeight: 'bold'
+          }}>
+            {photographer.name}&apos;s Gallery
+          </h1>
+          <p style={{
+            fontSize: '1.2em',
+            color: '#666',
+            marginBottom: '1em'
+          }}>
+            {photographer.photos.length} beautiful moments captured
+          </p>
         </div>
-      )}
 
-      {/* Back button */}
-      <div style={{ textAlign: 'center' }}>
-        <BackLink href="/photographers">
-          Back to Photographers
-        </BackLink>
+        {/* Gallery Content */}
+        {photographer.photos.length > 0 ? (
+          <PhotoGallery 
+            photos={photographer.photos}
+            assetPath={assetPath}
+          />
+        ) : (
+          <div style={{
+            textAlign: 'center',
+            padding: '4em 2em',
+            color: '#666'
+          }}>
+            <div style={{ fontSize: '4em', marginBottom: '0.5em' }}>📷</div>
+            <h2>No photos available</h2>
+            <p>Check back soon for new photos!</p>
+          </div>
+        )}
+
+        {/* Back button */}
+        <div style={{ textAlign: 'center' }}>
+          <BackLink href="/photographers">
+            Back to Photographers
+          </BackLink>
+        </div>
       </div>
-    </div>
+    </ClientWrapper>
   );
 }
 

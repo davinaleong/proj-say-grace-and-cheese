@@ -17,9 +17,6 @@ interface MusicContextType {
   toggleMusic: () => void;
   volume: number;
   setVolume: (volume: number) => void;
-  confetti: ConfettiPiece[];
-  showConfetti: boolean;
-  toggleConfetti: () => void;
 }
 
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
@@ -207,9 +204,6 @@ export const MusicProvider: React.FC<MusicProviderProps> = ({ children }) => {
     toggleMusic,
     volume,
     setVolume,
-    confetti,
-    showConfetti,
-    toggleConfetti,
   };
 
   return (

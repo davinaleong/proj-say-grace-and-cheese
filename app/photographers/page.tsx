@@ -1,14 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { Home } from 'lucide-react';
 import Title from '../components/Title';
+import { MusicProvider } from '../contexts/MusicContext';
+import MusicControl from '../components/MusicControl';
 
 const photographers = ['Cindy', 'Davina', 'May Hwee', 'Vincent', 'Wendy', 'YY'];
 
 export default function PhotographersPage() {
   return (
-    <>
+    <MusicProvider>
       {/* Main content */}
       <div
         style={{
@@ -68,6 +69,9 @@ export default function PhotographersPage() {
           ))}
         </div>
       </div>
-    </>
+      
+      {/* Music Control */}
+      <MusicControl />
+    </MusicProvider>
   );
 }
