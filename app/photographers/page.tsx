@@ -272,38 +272,6 @@ export default function PhotographersPage() {
             </Link>
           ))}
         </div>
-
-        <Link
-          href="/"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.2em',
-            padding: '0.5em 1em',
-            backgroundColor: '#1c1c4a',
-            color: 'white',
-            textDecoration: 'none',
-            borderRadius: '0.2em',
-            fontSize: '1em',
-            fontWeight: '500',
-            transition: 'all 0.2s ease',
-            border: '2px solid transparent',
-            marginTop: '2em',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.backgroundColor = '#2d2d5a';
-            e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = '0 4px 12px rgba(28, 28, 74, 0.3)';
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.backgroundColor = '#1c1c4a';
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'none';
-          }}
-        >
-          <Home size={18} />
-          Home
-        </Link>
       </div>
     </>
   );

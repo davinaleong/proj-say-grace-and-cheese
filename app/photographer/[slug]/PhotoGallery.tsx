@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 interface PhotoGalleryProps {
   photos: string[];
@@ -52,28 +53,15 @@ export default function PhotoGallery({ photos, assetPath }: PhotoGalleryProps) {
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
               transition: 'all 0.3s ease'
             }}>
-              {/* Image placeholder with random height for masonry effect */}
-              <div style={{
-                width: '100%',
-                height: `${getRandomHeight(index)}px`,
-                backgroundColor: '#f8f9fa',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '2px dashed #e9ecef',
-                position: 'relative',
-                backgroundImage: `linear-gradient(45deg, #f8f9fa 25%, transparent 25%, transparent 75%, #f8f9fa 75%, #f8f9fa), 
-                                 linear-gradient(45deg, #f8f9fa 25%, transparent 25%, transparent 75%, #f8f9fa 75%, #f8f9fa)`,
-                backgroundSize: '20px 20px',
-                backgroundPosition: '0 0, 10px 10px'
-              }}>
-                <div style={{
-                  textAlign: 'center',
-                  color: '#6c757d'
-                }}>
-                  <div style={{ fontSize: '3em', marginBottom: '0.2em' }}>📸</div>
-                  <div style={{ fontSize: '0.9em', fontWeight: '500' }}>{photo}</div>
-                </div>
+              {/* Actual image */}
+              <div style={{ position: 'relative', width: '100%', height: `${getRandomHeight(index)}px` }}>
+                <Image
+                  src={`${assetPath}/${photo}`}
+                  alt={`Photo ${index + 1}`}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
                 
                 {/* Hover overlay */}
                 <div style={{
@@ -141,19 +129,36 @@ export default function PhotoGallery({ photos, assetPath }: PhotoGalleryProps) {
           onClick={() => setSelectedImage(null)}
         >
           <div style={{
+            position: 'relative',
             maxWidth: '90vw',
             maxHeight: '90vh',
-            backgroundColor: 'white',
-            padding: '2em',
-            borderRadius: '12px',
-            textAlign: 'center'
+            cursor: 'pointer'
           }}>
-            <p style={{ margin: 0, color: '#666' }}>
-              Image preview: {selectedImage}
-            </p>
-            <p style={{ marginTop: '1em', fontSize: '0.9em', color: '#999' }}>
+            <Image
+              src={selectedImage}
+              alt="Selected photo"
+              width={800}
+              height={600}
+              style={{
+                maxWidth: '90vw',
+                maxHeight: '90vh',
+                width: 'auto',
+                height: 'auto',
+                objectFit: 'contain'
+              }}
+            />
+            <div style={{
+              position: 'absolute',
+              bottom: '-40px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              color: 'white',
+              fontSize: '0.9em',
+              textAlign: 'center',
+              opacity: 0.8
+            }}>
               Click anywhere to close
-            </p>
+            </div>
           </div>
         </div>
       )}
