@@ -9,9 +9,9 @@ interface MusicControlProps {
 }
 
 export default function MusicControl({ className, style }: MusicControlProps) {
-  const { isPlaying, toggleMusic, showConfetti, toggleConfetti } = useMusicContext();
+  const { isPlaying, toggleMusic } = useMusicContext();
 
-  const buttonBaseStyle: React.CSSProperties = {
+  const buttonStyle: React.CSSProperties = {
     position: 'fixed',
     width: '60px',
     height: '60px',
@@ -28,20 +28,9 @@ export default function MusicControl({ className, style }: MusicControlProps) {
     transition: 'all 0.2s ease',
     zIndex: 2000,
     boxShadow: '0 4px 12px rgba(28, 28, 74, 0.3)',
-  };
-
-  const musicButtonStyle: React.CSSProperties = {
-    ...buttonBaseStyle,
     bottom: '2em',
     right: '2em',
     ...style
-  };
-
-  const confettiButtonStyle: React.CSSProperties = {
-    ...buttonBaseStyle,
-    bottom: '2em',
-    right: '5em',
-    backgroundColor: showConfetti ? '#1c1c4a' : '#666',
   };
 
   const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>, isEntering: boolean) => {
@@ -51,8 +40,7 @@ export default function MusicControl({ className, style }: MusicControlProps) {
       button.style.transform = 'translateY(-2px)';
       button.style.boxShadow = '0 6px 16px rgba(28, 28, 74, 0.4)';
     } else {
-      const isConfettiButton = button.getAttribute('aria-label')?.includes('confetti');
-      button.style.backgroundColor = isConfettiButton && !showConfetti ? '#666' : '#1c1c4a';
+      button.style.backgroundColor = '#1c1c4a';
       button.style.transform = 'translateY(0)';
       button.style.boxShadow = '0 4px 12px rgba(28, 28, 74, 0.3)';
     }
@@ -62,7 +50,7 @@ export default function MusicControl({ className, style }: MusicControlProps) {
     <button
         onClick={toggleMusic}
         className={className}
-        style={musicButtonStyle}
+        style={buttonStyle}
         onMouseEnter={(e) => handleButtonHover(e, true)}
         onMouseLeave={(e) => handleButtonHover(e, false)}
         aria-label={isPlaying ? 'Pause music' : 'Play music'}
