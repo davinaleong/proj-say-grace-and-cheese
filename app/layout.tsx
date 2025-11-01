@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Barriecito, Montserrat } from "next/font/google";
 import "./globals.css";
+import { MusicProvider } from "./contexts/MusicContext";
+import MusicControl from "./components/MusicControl";
 
 const barriecito = Barriecito({
   weight: "400",
@@ -28,7 +30,10 @@ export default function RootLayout({
       <body
         className={`${barriecito.variable} ${montserrat.variable} antialiased`}
       >
-        {children}
+        <MusicProvider>
+          {children}
+          <MusicControl />
+        </MusicProvider>
       </body>
     </html>
   );
