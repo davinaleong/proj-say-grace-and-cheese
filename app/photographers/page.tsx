@@ -38,30 +38,46 @@ export default function PhotographersPage() {
 
   // Auto-play music on component mount
   useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // Audio event listeners to sync state with actual playback
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    const handleEnded = () => setIsPlaying(false);
+
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+    audio.addEventListener('ended', handleEnded);
+
     const initializeAudio = async () => {
-      if (audioRef.current) {
-        audioRef.current.volume = 0.3; // Set volume to 30%
-        
-        try {
-          // Try to play the audio
-          await audioRef.current.play();
-          setIsPlaying(true);
-          setUserInteracted(true);
-        } catch {
-          // If auto-play fails (browser restriction), set playing to false
-          console.log('Auto-play blocked by browser, user interaction required');
-          setIsPlaying(false);
-        }
+      audio.volume = 0.3; // Set volume to 30%
+      
+      try {
+        // Try to play the audio
+        await audio.play();
+        setUserInteracted(true);
+      } catch {
+        // If auto-play fails (browser restriction), set playing to false
+        console.log('Auto-play blocked by browser, user interaction required');
+        setIsPlaying(false);
       }
     };
 
     // Global click handler to start music on first interaction
-    const handleFirstInteraction = async () => {
-      if (!userInteracted && audioRef.current && !isPlaying) {
+    const handleFirstInteraction = async (event: Event) => {
+      // Don't auto-start if clicking on the music button
+      if (event.target && (event.target as Element).closest('button')) {
+        return;
+      }
+      
+      if (!userInteracted && audio && audio.paused) {
         try {
-          await audioRef.current.play();
-          setIsPlaying(true);
+          await audio.play();
           setUserInteracted(true);
+          // Remove listeners after first successful interaction
+          document.removeEventListener('click', handleFirstInteraction);
+          document.removeEventListener('keydown', handleFirstInteraction);
         } catch {
           console.log('Failed to start music on user interaction');
         }
@@ -77,25 +93,29 @@ export default function PhotographersPage() {
     
     return () => {
       clearTimeout(timer);
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('ended', handleEnded);
       document.removeEventListener('click', handleFirstInteraction);
       document.removeEventListener('keydown', handleFirstInteraction);
     };
-  }, [userInteracted, isPlaying]);
+  }, [userInteracted]);
 
   const toggleMusic = async () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // Mark that user has interacted (so global handlers stop)
+    setUserInteracted(true);
+    
+    try {
+      if (audio.paused) {
+        await audio.play();
       } else {
-        try {
-          await audioRef.current.play();
-          setIsPlaying(true);
-        } catch {
-          console.log('Failed to play audio');
-          setIsPlaying(false);
-        }
+        audio.pause();
       }
+    } catch (error) {
+      console.log('Failed to toggle audio:', error);
     }
   };
 
