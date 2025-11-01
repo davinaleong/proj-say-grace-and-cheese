@@ -1,21 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
 
 export async function POST(request: NextRequest) {
   try {
     const { passphrase } = await request.json();
     
     if (!passphrase) {
-      return NextResponse.json({ error: 'Passphrase required' }, { status: 400 });
+      return NextResponse.json({ error: 'Password required' }, { status: 400 });
     }
 
-    const hashedPassword = process.env.PASSWORD_HASH;
+    const correctPassword = process.env.SITE_PASSWORD;
     
-    if (!hashedPassword) {
+    if (!correctPassword) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
-    const isValid = await bcrypt.compare(passphrase, hashedPassword);
+    // Simple string comparison - password must match exactly
+    const isValid = passphrase === correctPassword;
     
     if (isValid) {
       const response = NextResponse.json({ success: true });
@@ -24,14 +24,14 @@ export async function POST(request: NextRequest) {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 60 * 60 * 24 // 24 hours
+        maxAge: 60 * 60 * 24 * 7 // 7 days for convenience
       });
       return response;
     } else {
-      return NextResponse.json({ error: 'Invalid passphrase' }, { status: 401 });
+      return NextResponse.json({ error: 'Incorrect password' }, { status: 401 });
     }
   } catch (error) {
-    console.error('Passphrase verification error:', error);
+    console.error('Password verification error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

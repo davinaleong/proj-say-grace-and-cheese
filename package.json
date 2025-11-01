@@ -6,14 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "generate-hash": "node scripts/generate-hash.js",
-    "hash": "node scripts/hash-generator.cjs",
-    "debug-hash": "node scripts/debug-hash.cjs"
+    "lint": "eslint"
   },
   "dependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "bcryptjs": "^3.0.2",
     "lucide-react": "^0.552.0",
     "next": "16.0.1",
     "react": "19.2.0",
