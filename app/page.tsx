@@ -40,25 +40,43 @@ export default function HomePage() {
       display: 'flex', 
       alignItems: 'center', 
       justifyContent: 'center',
-      fontFamily: 'system-ui, sans-serif',
-      backgroundColor: '#f8fafc'
+      fontFamily: 'Montserrat, sans-serif',
+      backgroundColor: '#ffdbdc',
+      padding: '0.5em'
     }}>
       <div style={{
-        backgroundColor: 'white',
-        padding: '3rem',
-        borderRadius: '0.5rem',
-        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-        minWidth: '400px',
+        minWidth: '30ch',
         textAlign: 'center'
       }}>
-        <h1 style={{ 
-          fontSize: '2rem', 
-          fontWeight: 'bold', 
+        <div style={{
           marginBottom: '0.5rem',
-          color: '#1f2937'
+          height: '200px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}>
-          Say Grace and Cheese
-        </h1>
+          <svg width="800" height="200" viewBox="0 0 800 200">
+            <defs>
+              <path 
+                id="curve" 
+                d="M 75,150 Q 400,30 725,150" 
+                fill="none" 
+                stroke="none"
+              />
+            </defs>
+            <text 
+              fontSize="56" 
+              fontFamily="Barriecito, cursive" 
+              fontWeight="bold"
+              fill="#1c1c4a"
+              letterSpacing="4"
+            >
+              <textPath href="#curve" startOffset="50%" textAnchor="middle">
+                Say Grace and Cheese
+              </textPath>
+            </text>
+          </svg>
+        </div>
         
         <p style={{ 
           color: '#6b7280', 
@@ -78,9 +96,9 @@ export default function HomePage() {
               required
               style={{
                 width: '100%',
-                padding: '0.75rem',
+                padding: '0.5em',
                 border: '1px solid #d1d5db',
-                borderRadius: '0.375rem',
+                borderRadius: '0.2em',
                 fontSize: '1rem',
                 outline: 'none',
                 boxSizing: 'border-box'
@@ -95,11 +113,11 @@ export default function HomePage() {
             disabled={loading || !password.trim()}
             style={{
               width: '100%',
-              padding: '0.75rem',
+              padding: '0.5em',
               backgroundColor: loading || !password.trim() ? '#9ca3af' : '#3b82f6',
               color: 'white',
               border: 'none',
-              borderRadius: '0.375rem',
+              borderRadius: '0.2em',
               fontSize: '1rem',
               fontWeight: '500',
               cursor: loading || !password.trim() ? 'not-allowed' : 'pointer',
