@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { Home, Play, Pause } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import Title from '../components/Title';
 
@@ -19,27 +19,93 @@ interface ConfettiPiece {
 }
 
 export default function PhotographersPage() {
-  const [confetti, setConfetti] = useState<ConfettiPiece[]>([]);
-  const requestRef = useRef<number>();
-
-  useEffect(() => {
-    const newConfetti = Array.from({ length: 20 }).map((_, i) => ({
+  // Initialize confetti with a function to avoid re-running on every render
+  const [confetti, setConfetti] = useState<ConfettiPiece[]>(() => 
+    Array.from({ length: 20 }).map((_, i) => ({
       id: i,
       emoji: confettiEmojis[Math.floor(Math.random() * confettiEmojis.length)],
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * -window.innerHeight,
+      x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+      y: Math.random() * (typeof window !== 'undefined' ? -window.innerHeight : -800),
       rotation: Math.random() * 360,
       speed: 1 + Math.random() * 2,
       drift: (Math.random() - 0.5) * 1.5, // side-to-side
-    }));
-    setConfetti(newConfetti);
+    }))
+  );
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [userInteracted, setUserInteracted] = useState(false);
+  const requestRef = useRef<number | undefined>(undefined);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
+  // Auto-play music on component mount
+  useEffect(() => {
+    const initializeAudio = async () => {
+      if (audioRef.current) {
+        audioRef.current.volume = 0.3; // Set volume to 30%
+        
+        try {
+          // Try to play the audio
+          await audioRef.current.play();
+          setIsPlaying(true);
+          setUserInteracted(true);
+        } catch {
+          // If auto-play fails (browser restriction), set playing to false
+          console.log('Auto-play blocked by browser, user interaction required');
+          setIsPlaying(false);
+        }
+      }
+    };
+
+    // Global click handler to start music on first interaction
+    const handleFirstInteraction = async () => {
+      if (!userInteracted && audioRef.current && !isPlaying) {
+        try {
+          await audioRef.current.play();
+          setIsPlaying(true);
+          setUserInteracted(true);
+        } catch {
+          console.log('Failed to start music on user interaction');
+        }
+      }
+    };
+
+    // Add event listeners for user interaction
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('keydown', handleFirstInteraction);
+
+    // Small delay to ensure the audio element is mounted
+    const timer = setTimeout(initializeAudio, 100);
+    
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+  }, [userInteracted, isPlaying]);
+
+  const toggleMusic = async () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        try {
+          await audioRef.current.play();
+          setIsPlaying(true);
+        } catch {
+          console.log('Failed to play audio');
+          setIsPlaying(false);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
     const animate = () => {
       setConfetti(prev =>
         prev.map(item => {
           let newY = item.y + item.speed;
           let newX = item.x + item.drift;
-          let newRotation = item.rotation + 2;
+          const newRotation = item.rotation + 2;
 
           // reset when it falls out of view
           if (newY > window.innerHeight + 50) {
@@ -60,6 +126,55 @@ export default function PhotographersPage() {
 
   return (
     <>
+      {/* Background Music */}
+      <audio 
+        ref={audioRef}
+        src="/assets/music/bg_edited.mp3"
+        loop
+        preload="auto"
+        autoPlay
+        playsInline
+        controls={false}
+        style={{ display: 'none' }}
+      />
+
+      {/* Music Toggle Button */}
+      <button
+        onClick={toggleMusic}
+        style={{
+          position: 'fixed',
+          bottom: '2em',
+          right: '2em',
+          width: '60px',
+          height: '60px',
+          borderRadius: '50%',
+          backgroundColor: '#1c1c4a',
+          color: 'white',
+          border: '2px solid transparent',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '1.2em',
+          fontWeight: '500',
+          transition: 'all 0.2s ease',
+          zIndex: 2000,
+          boxShadow: '0 4px 12px rgba(28, 28, 74, 0.3)'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = '#2d2d5a';
+          e.currentTarget.style.transform = 'translateY(-2px)';
+          e.currentTarget.style.boxShadow = '0 6px 16px rgba(28, 28, 74, 0.4)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = '#1c1c4a';
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.boxShadow = '0 4px 12px rgba(28, 28, 74, 0.3)';
+        }}
+      >
+        {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+      </button>
+
       {/* Confetti Layer */}
       {confetti.map(item => (
         <div
@@ -166,8 +281,8 @@ export default function PhotographersPage() {
             e.currentTarget.style.boxShadow = 'none';
           }}
         >
-          <ArrowLeft size={18} />
-          Back to home
+          <Home size={18} />
+          Home
         </Link>
       </div>
     </>
