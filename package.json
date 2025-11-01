@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate-hash": "node scripts/generate-hash.mjs",
-    "hash": "node scripts/hash-generator.cjs"
+    "generate-hash": "node scripts/generate-hash.js",
+    "hash": "node scripts/hash-generator.cjs",
+    "debug-hash": "node scripts/debug-hash.cjs"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
